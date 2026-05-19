@@ -157,23 +157,23 @@
         }
 
         function switchView(view) {
-            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-            if (view === 'student') {
-                document.getElementById('studentPanel').classList.add('active');
-                document.getElementById('studentNavBtn').classList.add('active');
-                document.getElementById('navbarTitle').innerText = "Evsuistas Log Portal";
-            } else if (view === 'admin') {
-                document.getElementById('adminPanel').classList.add('active');
-                document.getElementById('adminNavBtn').classList.add('active');
-                document.getElementById('navbarTitle').innerText = "System Administration";
-                fetchLogs(); 
-            }
-            
-            toggleMenu(); // Automatically close side drawer when user switches view window panels
-        }
-
+    if (view === 'student') {
+        document.getElementById('studentPanel').classList.add('active');
+        document.getElementById('studentNavBtn').classList.add('active');
+        // SIGURADUHING IPALIT ANG SAKTONG TITLE MO RITO:
+        document.getElementById('navbarTitle').innerText = "Students Library Logging Portal";
+    } else if (view === 'admin') {
+        document.getElementById('adminPanel').classList.add('active');
+        document.getElementById('adminNavBtn').classList.add('active');
+        document.getElementById('navbarTitle').innerText = "System Administration";
+        fetchLogs(); 
+    }
+    
+    toggleMenu(); 
+}
         // FORM SUBMISSION PIPELINE MANAGEMENT
         const loginForm = document.getElementById('loginForm');
         const statusMessage = document.getElementById('statusMessage');
