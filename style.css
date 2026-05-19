@@ -1,0 +1,387 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #FAF8F5; /* MALINIS NA LIGHT BACKGROUND (Warm Off-White) */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: #5A0006; /* Rosewood para sa main text */
+}
+
+/* CONTAINER WRAPPER */
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background: #FAF8F5;
+    position: relative;
+    overflow: hidden;
+}
+
+/* TOP NAVIGATION BAR */
+.top-navbar {
+    width: 100%;
+    height: 65px;
+    background: linear-gradient(135deg, #920004 0%, #5A0006 100%); /* SANGRIA TO ROSEWOOD GRADIENT */
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(90, 0, 6, 0.15);
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+/* HAMBURGER MENU TOGGLE ICON BUTTON */
+.menu-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+    outline: none;
+}
+
+.menu-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.menu-line {
+    width: 20px;
+    height: 2.5px;
+    background-color: #FFF;
+    border-radius: 2px;
+}
+
+.navbar-title {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFF;
+}
+
+/* SLIDING SIDEBAR DRAWER */
+.sidebar-drawer {
+    position: absolute;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100%;
+    background: linear-gradient(180deg, #920004 0%, #5A0006 100%); /* SANGRIA TO ROSEWOOD */
+    z-index: 100;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.25);
+    transition: left 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+.sidebar-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.drawer-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+.drawer-avatar-img {
+    width: 80px;         /* Tamang laki para sa mobile drawer view */
+    height: 80px;        /* Pantay na taas at lapad */
+    object-fit: contain; /* Sinesave nito ang aspect ratio para hindi mapiat ang logo */
+    border-radius: 50%;  /* Ginagawa itong pabilog kung gusto mo, tanggalin ito kung square ang logo niyo */
+    background: #FFF;    /* Puting background sa likod ng logo para lutang */
+    padding: 6px;        /* Kaunting espasyo sa loob ng puting bilog */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.close-drawer-btn {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    color: #FFF;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.drawer-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.drawer-avatar {
+    font-size: 32px;
+    background: #FFF;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.drawer-welcome {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 0 10px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 14px;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFF;
+}
+
+.nav-btn.active {
+    background: #FFF;
+    color: #920004; /* Sangria text kapag active */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* MAIN APP WINDOW CONTENT SCROLLER */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.header-panel h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #5A0006;
+}
+
+/* HERO BANNER CARD */
+.hero-banner {
+    background: #FCEFEF; /* Soft light red/cream tint para sa banner */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: inset 2px 2px 5px rgba(255,255,255,0.7), inset -2px -2px 5px rgba(90,0,6,0.05);
+    border: 1px solid rgba(255,255,255,0.6);
+    width: 100%;
+}
+
+.hero-title {
+    font-size: 18px;
+    color: #5A0006; /* Rosewood */
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.hero-subtitle {
+    font-size: 13px;
+    color: #920004; /* Sangria */
+    line-height: 1.4;
+}
+
+/* VIEW SWITCHING PANELS */
+.view-panel {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+    width: 100%;
+}
+
+.view-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* PLUSH INPUT FORMS CARD */
+.plush-card {
+    background: #FFF;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 4px 4px 15px rgba(90, 0, 6, 0.04), -4px -4px 15px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255,255,255,0.7);
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #5A0006; /* Rosewood */
+    padding-left: 2px;
+}
+
+/* Inputs and Dropdowns */
+input, select {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid rgba(90, 0, 6, 0.08);
+    border-radius: 14px;
+    font-size: 15px;
+    background: #FDFBF9; /* Mas malinis na input box color */
+    color: #5A0006;
+    outline: none;
+    transition: all 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23920004' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
+
+input:hover, select:hover {
+    background-color: #F7F3EE;
+}
+
+input:focus, select:focus {
+    background-color: #FFF;
+    border-color: #D92200; /* MAXIMUM RED KAPAG NAKA-FOCUS */
+}
+
+/* SUBMIT BUTTON WITH GRADIENT FROM THE PALETTE */
+button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #F37100 0%, #D92200 100%); /* PHILIPPINE ORANGE TO MAXIMUM RED */
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(217, 34, 0, 0.25);
+    transition: all 0.2s ease;
+    margin-top: 6px;
+}
+
+button[type="submit"]:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 8px 18px rgba(217, 34, 0, 0.35);
+}
+
+/* DATA TABLE STYLING */
+.table-container {
+    background: #FFF;
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 4px 4px 12px rgba(90, 0, 6, 0.04);
+    border: 1px solid rgba(255,255,255,0.7);
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+th {
+    color: #920004; /* Sangria */
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px;
+    text-align: left;
+}
+
+td {
+    padding: 12px 8px;
+    background: #FAF8F5;
+    color: #5A0006;
+    font-size: 13px;
+}
+
+tr td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #D92200; /* Maximum Red para sa # Number */
+    font-weight: bold;
+}
+
+tr td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.status-message {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 12px;
+    display: none;
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+}

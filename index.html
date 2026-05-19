@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Logging System</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        <div class="drawer-overlay" id="drawerOverlay" onclick="toggleMenu()"></div>
+
+        <div class="sidebar-drawer" id="sidebarDrawer">
+            <button class="close-drawer-btn" onclick="toggleMenu()">×</button>
+            
+            <div class="drawer-header">
+                <img src="evsu.jpg" alt="EVSU Logo" class="drawer-avatar-img">
+                <div class="drawer-welcome">Students Library Logging Portal</div>
+            </div>
+
+            <div class="nav-menu">
+                <button class="nav-btn active" id="studentNavBtn" onclick="switchView('student')">
+                    <span>🏠</span> Student Sign-In
+                </button>
+                <button class="nav-btn" id="adminNavBtn" onclick="switchView('admin')">
+                    <span>📊</span> Admin
+                </button>
+            </div>
+        </div>
+
+        <div class="top-navbar">
+            <button class="menu-toggle-btn" onclick="toggleMenu()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </button>
+            <div class="navbar-title" id="navbarTitle">Students Library Logging Portal</div>
+            <div style="width: 38px;"></div> </div>
+
+        <div class="main-content">
+            
+            <div id="studentPanel" class="view-panel active">
+                <div class="header-panel" style="margin-bottom: 12px;">
+                </div>
+                
+                <div class="hero-banner">
+                    <div>
+                        <div class="hero-title">Welcome, Evsunistas! ☀️</div>
+                        <div class="hero-subtitle">Mabuhay! Please input your correct program details below to log your visit.</div>
+                    </div>
+                </div>
+
+                <div class="plush-card">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="studentId">Student ID Number</label>
+                            <input type="text" id="studentId" required placeholder="e.g., 2023-10042">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentName">Full Name</label>
+                            <input type="text" id="studentName" required placeholder="e.g., Jane Doe">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course">Course Program</label>
+                            <select id="course" required>
+                                <option value="">Select Course</option>
+                                <option value="BSIT">BSIT (Information Technology)</option>
+                                <option value="BSFI">BSFI (Fisheries)</option>
+                                <option value="BSENTREP">BSENTREP (Entrepreneurship)</option>
+                                <option value="BSED-MATH">BSED-MATH (Education)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="yearLevel">Year Level</label>
+                            <select id="yearLevel" required>
+                                <option value="">Select Year</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="section">Section</label>
+                            <input type="text" id="section" required placeholder="e.g., A, B, 1A">
+                        </div>
+
+                        <button type="submit">Submit Log In</button>
+                    </form>
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+            </div>
+
+            <div id="adminPanel" class="view-panel">
+                <div class="header-panel">
+    
+                </div>
+
+                <div class="hero-banner">
+                    <div>
+                        <div class="hero-title">Realtime Entries</div>
+                        <div class="hero-subtitle">Live checkpoint logs currently recorded in the active database.</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Course Details</th>
+                                <th>Time In</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // SUPABASE BACKEND LINK ROUTER AGENT
+        const SUPABASE_URL = 'https://mxwcbtypoemihcfecewt.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14d2NidHlwb2VtaWhjZmVjZXd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxOTU3MTAsImV4cCI6MjA5NDc3MTcxMH0.ZSQAJK2cz4zapHK2szeglGP78wNLGav8IF4zbdqr9OY';
+        
+        let supabaseInstance;
+        try {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseInstance = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            } else if (typeof Supabase !== 'undefined' && Supabase.createClient) {
+                supabaseInstance = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch(e) {
+            console.error("Supabase initialization error:", e);
+        }
+
+        // SLIDING VIEW MENU INTERACTION LOGIC CONTROL
+        function toggleMenu() {
+            const drawer = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function switchView(view) {
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (view === 'student') {
+                document.getElementById('studentPanel').classList.add('active');
+                document.getElementById('studentNavBtn').classList.add('active');
+                document.getElementById('navbarTitle').innerText = "Evsuistas Log Portal";
+            } else if (view === 'admin') {
+                document.getElementById('adminPanel').classList.add('active');
+                document.getElementById('adminNavBtn').classList.add('active');
+                document.getElementById('navbarTitle').innerText = "System Administration";
+                fetchLogs(); 
+            }
+            
+            toggleMenu(); // Automatically close side drawer when user switches view window panels
+        }
+
+        // FORM SUBMISSION PIPELINE MANAGEMENT
+        const loginForm = document.getElementById('loginForm');
+        const statusMessage = document.getElementById('statusMessage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const name = document.getElementById('studentName').value;
+            const course = document.getElementById('course').value;
+            const yearLevel = document.getElementById('yearLevel').value;
+            const section = document.getElementById('section').value;
+
+            if (!supabaseInstance) {
+                showStatus('Database client is unavailable.', '#E25C5C');
+                return;
+            }
+
+            const { data, error } = await supabaseInstance
+                .from('library_logs')
+                .insert([
+                    { 
+                        student_id: studentId, 
+                        name: name, 
+                        course: course, 
+                        year_level: yearLevel,
+                        section: section
+                    }
+                ]);
+
+            if (error) {
+                showStatus('Error saving log data.', '#E25C5C');
+                console.error(error);
+            } else {
+                showStatus('Logged in successfully! ☀️', '#5CC88A');
+                loginForm.reset();
+            }
+        });
+
+        function showStatus(text, color) {
+            statusMessage.innerText = text;
+            statusMessage.style.backgroundColor = color;
+            statusMessage.style.color = 'white';
+            statusMessage.style.display = 'block';
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 4000);
+        }
+
+        // PARSING RECORDS ENGINE LOG DATA ENGINE
+        async function fetchLogs() {
+            const tableBody = document.getElementById('logTableBody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; background:none;">Loading...</td></tr>';
+
+            if (!supabaseInstance) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#E25C5C; background:none;">Offline.</td></tr>';
+                return;
+            }
+
+            let query = supabaseInstance.from('library_logs').select('*');
+            const { data: dataOrdered, error: errorOrdered } = await query.order('time_in', { ascending: false });
+
+            if (errorOrdered) {
+                const { data: dataFallback, error: errorFallback } = await supabaseInstance.from('library_logs').select('*');
+                if (errorFallback) {
+                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#E25C5C; background:none;">Error loading logs.</td></tr>';
+                    return;
+                }
+                renderTable(dataFallback);
+                return;
+            }
+
+            renderTable(dataOrdered);
+        }
+
+        function renderTable(data) {
+            const tableBody = document.getElementById('logTableBody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; background:none;">No records.</td></tr>';
+                return;
+            }
+
+            data.forEach((log, index) => {
+                const row = document.createElement('tr');
+                const formattedTime = log.time_in ? new Date(log.time_in).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A';
+                const visibleIndex = data.length - index;
+                const courseDetails = `${log.course || ''} ${log.year_level?.split(' ')[0] || ''}-${log.section || ''}`;
+
+                row.innerHTML = `
+                    <td>#${visibleIndex}</td>
+                    <td>${log.student_id || 'N/A'}</td>
+                    <td>${log.name || 'N/A'}</td>
+                    <td>${courseDetails}</td>
+                    <td>${formattedTime}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
