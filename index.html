@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   
 </head>
 <body>
 
@@ -39,13 +40,13 @@
                 <div class="menu-line"></div>
             </button>
             <div class="navbar-title" id="navbarTitle">Students Library Logging Portal</div>
-            <div style="width: 38px;"></div> </div>
+            <div style="width: 38px;"></div> 
+        </div>
 
         <div class="main-content">
             
             <div id="studentPanel" class="view-panel active">
-                <div class="header-panel" style="margin-bottom: 12px;">
-                </div>
+                <div class="header-panel" style="margin-bottom: 12px;"></div>
                 
                 <div class="hero-banner">
                     <div>
@@ -100,39 +101,23 @@
             </div>
 
             <div id="adminPanel" class="view-panel">
-                <div class="header-panel">
-    
-                </div>
+                <div class="header-panel"></div>
 
                 <div class="hero-banner">
                     <div>
-                        <div class="hero-title">Realtime Entries</div>
-                        <div class="hero-subtitle">Live checkpoint logs currently recorded in the active database.</div>
+                        <div class="hero-title">Realtime Archive Logs</div>
+                        <div class="hero-subtitle">Logs grouped into daily operational folders. Click folders to collapse/expand entries.</div>
                     </div>
                 </div>
 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Student ID</th>
-                                <th>Name</th>
-                                <th>Course Details</th>
-                                <th>Time In</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logTableBody">
-                        </tbody>
-                    </table>
-                </div>
+                <div id="foldersContainer"></div>
             </div>
 
         </div>
     </div>
 
+
     <script>
-        // SUPABASE BACKEND LINK ROUTER AGENT
         const SUPABASE_URL = 'https://mxwcbtypoemihcfecewt.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14d2NidHlwb2VtaWhjZmVjZXd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxOTU3MTAsImV4cCI6MjA5NDc3MTcxMH0.ZSQAJK2cz4zapHK2szeglGP78wNLGav8IF4zbdqr9OY';
         
@@ -147,7 +132,6 @@
             console.error("Supabase initialization error:", e);
         }
 
-        // SLIDING VIEW MENU INTERACTION LOGIC CONTROL
         function toggleMenu() {
             const drawer = document.getElementById('sidebarDrawer');
             const overlay = document.getElementById('drawerOverlay');
@@ -157,23 +141,23 @@
         }
 
         function switchView(view) {
-    document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-    if (view === 'student') {
-        document.getElementById('studentPanel').classList.add('active');
-        document.getElementById('studentNavBtn').classList.add('active');
-        document.getElementById('navbarTitle').innerText = "Students Library Logging Portal";
-    } else if (view === 'admin') {
-        document.getElementById('adminPanel').classList.add('active');
-        document.getElementById('adminNavBtn').classList.add('active');
-        document.getElementById('navbarTitle').innerText = "System Administration";
-        fetchLogs(); 
-    }
-    
-    toggleMenu(); 
-}
-        // FORM SUBMISSION PIPELINE MANAGEMENT
+            if (view === 'student') {
+                document.getElementById('studentPanel').classList.add('active');
+                document.getElementById('studentNavBtn').classList.add('active');
+                document.getElementById('navbarTitle').innerText = "Students Library Logging Portal";
+            } else if (view === 'admin') {
+                document.getElementById('adminPanel').classList.add('active');
+                document.getElementById('adminNavBtn').classList.add('active');
+                document.getElementById('navbarTitle').innerText = "System Administration";
+                fetchLogs(); 
+            }
+            
+            toggleMenu(); 
+        }
+
         const loginForm = document.getElementById('loginForm');
         const statusMessage = document.getElementById('statusMessage');
 
@@ -191,6 +175,7 @@
                 return;
             }
 
+            // Kapag walang explicitly declared na time_in rito, ang database default system (now()) ang awtomatikong magtatala.
             const { data, error } = await supabaseInstance
                 .from('library_logs')
                 .insert([
@@ -222,15 +207,14 @@
             }, 4000);
         }
 
-        // PARSING RECORDS ENGINE LOG DATA ENGINE
         async function fetchLogs() {
-            const tableBody = document.getElementById('logTableBody');
-            if (!tableBody) return;
+            const container = document.getElementById('foldersContainer');
+            if (!container) return;
 
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; background:none;">Loading...</td></tr>';
+            container.innerHTML = '<div style="text-align:center; padding: 20px; color: #5A0006;">Loading Archive Folders...</div>';
 
             if (!supabaseInstance) {
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#E25C5C; background:none;">Offline.</td></tr>';
+                container.innerHTML = '<div style="text-align:center; padding: 20px; color:#E25C5C;">Offline. Cannot connect to archive.</div>';
                 return;
             }
 
@@ -238,45 +222,101 @@
             const { data: dataOrdered, error: errorOrdered } = await query.order('time_in', { ascending: false });
 
             if (errorOrdered) {
-                const { data: dataFallback, error: errorFallback } = await supabaseInstance.from('library_logs').select('*');
-                if (errorFallback) {
-                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#E25C5C; background:none;">Error loading logs.</td></tr>';
-                    return;
-                }
-                renderTable(dataFallback);
+                container.innerHTML = '<div style="text-align:center; padding: 20px; color:#E25C5C;">Error loading log entries.</div>';
                 return;
             }
 
-            renderTable(dataOrdered);
+            renderFolders(dataOrdered);
         }
 
-        function renderTable(data) {
-            const tableBody = document.getElementById('logTableBody');
-            if (!tableBody) return;
+        // ENGINE FUNCTION: Nagpapangkat ng logs para maging "Date Folders"
+        function renderFolders(data) {
+            const container = document.getElementById('foldersContainer');
+            if (!container) return;
             
-            tableBody.innerHTML = '';
+            container.innerHTML = '';
 
             if (!data || data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; background:none;">No records.</td></tr>';
+                container.innerHTML = '<div style="text-align:center; padding: 20px; color: #920004;">No records found inside the log database.</div>';
                 return;
             }
 
-            data.forEach((log, index) => {
-                const row = document.createElement('tr');
-                const formattedTime = log.time_in ? new Date(log.time_in).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A';
-                const visibleIndex = data.length - index;
-                const courseDetails = `${log.course || ''} ${log.year_level?.split(' ')[0] || ''}-${log.section || ''}`;
+            // Step 1: I-pangkat ang logs base sa Petsa (YYYY-MM-DD)
+            const groupedLogs = {};
+            data.forEach((log) => {
+                const dateObj = log.time_in ? new Date(log.time_in) : new Date();
+                
+                // Formatted string key (e.g., "May 21, 2026") para maging malinis tingnan ang folder label
+                const folderDateLabel = dateObj.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' });
+                
+                if (!groupedLogs[folderDateLabel]) {
+                    groupedLogs[folderDateLabel] = [];
+                }
+                groupedLogs[folderDateLabel].push(log);
+            });
 
-                row.innerHTML = `
-                    <td>#${visibleIndex}</td>
-                    <td>${log.student_id || 'N/A'}</td>
-                    <td>${log.name || 'N/A'}</td>
-                    <td>${courseDetails}</td>
-                    <td>${formattedTime}</td>
+            // Step 2: Gumawa ng HTML folder system elements para sa bawat Petsa
+            Object.keys(groupedLogs).forEach((dateLabel, folderIndex) => {
+                const logsInThisDate = groupedLogs[dateLabel];
+                
+                const folderGroupElement = document.createElement('div');
+                folderGroupElement.className = 'date-folder-group';
+                
+                // Awtomatikong buksan ang pinakabagong folder (#0 / pinaka-unang date), i-collapse naman ang mga nakaraang araw
+                if (folderIndex > 0) {
+                    folderGroupElement.classList.add('collapsed');
+                }
+
+                folderGroupElement.innerHTML = `
+                    <div class="date-folder-header" onclick="toggleFolder(this)">
+                        <div class="folder-title-flex">
+                            <span>📁</span> ${dateLabel} 
+                            <span class="log-count-badge">${logsInThisDate.length} Students</span>
+                        </div>
+                        <span class="folder-icon-indicator">▼</span>
+                    </div>
+                    <div class="date-folder-content">
+                        <div class="table-container" style="box-shadow: none; border: none; padding: 0;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Student ID</th>
+                                        <th>Name</th>
+                                        <th>Course Details</th>
+                                        <th>Time In</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${logsInThisDate.map((log, index) => {
+                                        const visibleIndex = logsInThisDate.length - index;
+                                        const formattedTime = log.time_in ? new Date(log.time_in).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A';
+                                        const courseDetails = `${log.course || ''} ${log.year_level?.split(' ')[0] || ''}-${log.section || ''}`;
+                                        return `
+                                            <tr>
+                                                <td>#${visibleIndex}</td>
+                                                <td>${log.student_id || 'N/A'}</td>
+                                                <td>${log.name || 'N/A'}</td>
+                                                <td>${courseDetails}</td>
+                                                <td>${formattedTime}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 `;
-                tableBody.appendChild(row);
+                container.appendChild(folderGroupElement);
             });
         }
+
+        // Toggles expansion/collapse ng napiling date folder card block
+        function toggleFolder(headerElement) {
+            const folderGroupElement = headerElement.parentElement;
+            folderGroupElement.classList.toggle('collapsed');
+        }
     </script>
+    
 </body>
 </html>

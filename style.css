@@ -6,32 +6,31 @@
 }
 
 body {
-    background-color: #FAF8F5; /* MALINIS NA LIGHT BACKGROUND (Warm Off-White) */
+    background-color: #FAF8F5;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    color: #5A0006; /* Rosewood para sa main text */
+    color: #5A0006; /* primary text */
 }
 
-/* CONTAINER WRAPPER */
+
 .dashboard-wrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
+    width: 100vw;       /* monitor screen */
+    min-height: 100vh;  
     background: #FAF8F5;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
-/* TOP NAVIGATION BAR */
+/* TOP NAVIGATION BAR - Full Width stretched */
 .top-navbar {
     width: 100%;
     height: 65px;
-    background: linear-gradient(135deg, #920004 0%, #5A0006 100%); /* SANGRIA TO ROSEWOOD GRADIENT */
-    padding: 0 16px;
+    background: linear-gradient(135deg, #920004 0%, #5A0006 100%); 
+    padding: 0 40px; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -71,7 +70,7 @@ body {
 .navbar-title {
     flex: 1;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: #FFF;
 }
@@ -83,7 +82,7 @@ body {
     left: -280px;
     width: 260px;
     height: 100%;
-    background: linear-gradient(180deg, #920004 0%, #5A0006 100%); /* SANGRIA TO ROSEWOOD */
+    background: linear-gradient(180deg, #920004 0%, #5A0006 100%);
     z-index: 100;
     padding: 30px 20px;
     display: flex;
@@ -101,8 +100,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.5);
     z-index: 90;
     display: none;
@@ -113,16 +112,6 @@ body {
 .drawer-overlay.show {
     display: block;
     opacity: 1;
-}
-
-.drawer-avatar-img {
-    width: 80px;         /* Tamang laki para sa mobile drawer view */
-    height: 80px;        /* Pantay na taas at lapad */
-    object-fit: contain; /* Sinesave nito ang aspect ratio para hindi mapiat ang logo */
-    border-radius: 50%;  /* Ginagawa itong pabilog kung gusto mo, tanggalin ito kung square ang logo niyo */
-    background: #FFF;    /* Puting background sa likod ng logo para lutang */
-    padding: 6px;        /* Kaunting espasyo sa loob ng puting bilog */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .close-drawer-btn {
@@ -146,15 +135,13 @@ body {
     width: 100%;
 }
 
-.drawer-avatar {
-    font-size: 32px;
-    background: #FFF;
-    width: 70px;
-    height: 70px;
+.drawer-avatar-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #FFF;
+    padding: 6px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
@@ -196,47 +183,47 @@ body {
 
 .nav-btn.active {
     background: #FFF;
-    color: #920004; /* Sangria text kapag active */
+    color: #920004;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* MAIN APP WINDOW CONTENT SCROLLER */
+/* MAIN APP WINDOW CONTENT SCROLLER - Spreads across the whole PC screen */
 .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 40px 50px; 
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 30px;
     width: 100%;
 }
 
 .header-panel h1 {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     color: #5A0006;
 }
 
-/* HERO BANNER CARD */
+/* HERO BANNER CARD - Stretches perfectly to screen edges */
 .hero-banner {
-    background: #FCEFEF; /* Soft light red/cream tint para sa banner */
+    background: #FCEFEF;
     border-radius: 20px;
-    padding: 20px;
-    box-shadow: inset 2px 2px 5px rgba(255,255,255,0.7), inset -2px -2px 5px rgba(90,0,6,0.05);
+    padding: 30px;
+    box-shadow: inset 2px 2px 5px rgba(255,255,255,0.7), inset -2px -2px 5px rgba(90,0,6,0.03);
     border: 1px solid rgba(255,255,255,0.6);
     width: 100%;
 }
 
 .hero-title {
-    font-size: 18px;
-    color: #5A0006; /* Rosewood */
+    font-size: 22px;
+    color: #5A0006;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .hero-subtitle {
-    font-size: 13px;
-    color: #920004; /* Sangria */
-    line-height: 1.4;
+    font-size: 15px;
+    color: #920004;
+    line-height: 1.5;
 }
 
 /* VIEW SWITCHING PANELS */
@@ -255,38 +242,45 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* PLUSH INPUT FORMS CARD */
+/* PLUSH INPUT FORMS CARD - Ngayon ay 100% wide na rin para sakop ang buong monitor niyo */
 .plush-card {
     background: #FFF;
     border-radius: 24px;
-    padding: 24px;
-    box-shadow: 4px 4px 15px rgba(90, 0, 6, 0.04), -4px -4px 15px rgba(255, 255, 255, 0.8);
+    padding: 45px; /* form area */
+    box-shadow: 4px 4px 25px rgba(90, 0, 6, 0.04), -4px -4px 25px rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255,255,255,0.7);
+    width: 100%; /*max-width para mag-stretch  */
+}
+
+/* LAYOUT FOR SIDE-BY-SIDE FIELDS */
+.form-row {
+    display: flex;
+    gap: 30px; 
     width: 100%;
 }
 
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 24px;
     width: 100%;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 600;
-    font-size: 13px;
-    color: #5A0006; /* Rosewood */
+    font-size: 14px;
+    color: #5A0006;
     padding-left: 2px;
 }
 
 /* Inputs and Dropdowns */
 input, select {
     width: 100%;
-    padding: 16px;
+    padding: 18px; /* text boxes */
     border: 1px solid rgba(90, 0, 6, 0.08);
     border-radius: 14px;
-    font-size: 15px;
-    background: #FDFBF9; /* Mas malinis na input box color */
+    font-size: 16px;
+    background: #FDFBF9;
     color: #5A0006;
     outline: none;
     transition: all 0.2s ease;
@@ -297,9 +291,9 @@ input, select {
 select {
     background-image: url("data:image/svg+xml;utf8,<svg fill='%23920004' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
     background-repeat: no-repeat;
-    background-position: right 14px center;
+    background-position: right 18px center;
     background-size: 16px;
-    padding-right: 36px;
+    padding-right: 40px;
 }
 
 input:hover, select:hover {
@@ -308,14 +302,14 @@ input:hover, select:hover {
 
 input:focus, select:focus {
     background-color: #FFF;
-    border-color: #D92200; /* MAXIMUM RED KAPAG NAKA-FOCUS */
+    border-color: #D92200;
 }
 
 /* SUBMIT BUTTON WITH GRADIENT FROM THE PALETTE */
 button[type="submit"] {
     width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #F37100 0%, #D92200 100%); /* PHILIPPINE ORANGE TO MAXIMUM RED */
+    padding: 18px;
+    background: linear-gradient(135deg, #F37100 0%, #D92200 100%);
     color: white;
     border: none;
     border-radius: 14px;
@@ -324,7 +318,7 @@ button[type="submit"] {
     cursor: pointer;
     box-shadow: 0 6px 15px rgba(217, 34, 0, 0.25);
     transition: all 0.2s ease;
-    margin-top: 6px;
+    margin-top: 10px;
 }
 
 button[type="submit"]:hover {
@@ -332,11 +326,11 @@ button[type="submit"]:hover {
     box-shadow: 0 8px 18px rgba(217, 34, 0, 0.35);
 }
 
-/* DATA TABLE STYLING */
+/* DATA TABLE STYLING - Full Widescreen Matrix */
 .table-container {
     background: #FFF;
     border-radius: 20px;
-    padding: 14px;
+    padding: 24px;
     box-shadow: 4px 4px 12px rgba(90, 0, 6, 0.04);
     border: 1px solid rgba(255,255,255,0.7);
     overflow-x: auto;
@@ -350,30 +344,48 @@ table {
 }
 
 th {
-    color: #920004; /* Sangria */
+    color: #920004;
     font-weight: 600;
-    font-size: 12px;
-    padding: 8px;
+    font-size: 14px;
+    padding: 12px;
     text-align: left;
 }
 
 td {
-    padding: 12px 8px;
+    padding: 16px 12px;
     background: #FAF8F5;
     color: #5A0006;
-    font-size: 13px;
+    font-size: 15px;
 }
 
 tr td:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    color: #D92200; /* Maximum Red para sa # Number */
+    color: #D92200;
     font-weight: bold;
 }
 
 tr td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+/* Sizing flex properties */
+.flex-1 { flex: 1; }
+.flex-2 { flex: 1.8; }
+
+/* RESPONSIVE DESIGN FOR SMARTPHONES */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .main-content {
+        padding: 20px;
+    }
+    .plush-card {
+        padding: 24px;
+    }
 }
 
 .status-message {
@@ -385,3 +397,69 @@ tr td:last-child {
     font-weight: 600;
     font-size: 13px;
 }
+
+
+
+ /* Dagdag na CSS para sa Date Folder design at Toggle effects */
+        .date-folder-group {
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(90, 0, 6, 0.08);
+            background: #FFF;
+        }
+
+        .date-folder-header {
+            background: linear-gradient(90deg, #FAF8F5 0%, #F5F1EB 100%);
+            padding: 14px 20px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #5A0006;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid rgba(90, 0, 6, 0.05);
+        }
+
+        .date-folder-header:hover {
+            background: #EFEBE4;
+        }
+
+        .date-folder-header .folder-icon-indicator {
+            font-size: 16px;
+            color: #920004;
+            transition: transform 0.2s ease;
+        }
+
+        /* Kapag nakabukas ang folder, iikot ang arrow icon indicator */
+        .date-folder-group.collapsed .date-folder-header .folder-icon-indicator {
+            transform: rotate(-90deg);
+        }
+
+        .date-folder-content {
+            padding: 10px;
+            display: block;
+        }
+
+        .date-folder-group.collapsed .date-folder-content {
+            display: none;
+        }
+
+        .log-count-badge {
+            background: #920004;
+            color: #FFF;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .folder-title-flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
